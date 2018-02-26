@@ -1,8 +1,9 @@
 package models
 
 const (
-	IPSEC_SERVER_ONLINE = iota
-	IPSEC_SERVER_OFFLINE
+	IPSEC_SERVER_START = iota
+	IPSEC_SERVER_ONLINE
+	IPSEC_SERVER_STOP
 )
 
 type IpsecServerHistory struct {

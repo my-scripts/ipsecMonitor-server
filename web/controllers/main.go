@@ -162,9 +162,11 @@ func (this *MainController) BuildMemoryData() {
 
 func (this *MainController) getState(state int) string {
 	switch state {
-	case models.IPSEC_SERVER_ONLINE:
+	case models.IPSEC_SERVER_START:
 		return "启动"
-	case models.IPSEC_SERVER_OFFLINE:
+	case models.IPSEC_SERVER_ONLINE:
+		return "工作"
+	case models.IPSEC_SERVER_STOP:
 		return "停止"
 	}
 	return ""
