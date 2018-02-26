@@ -1,0 +1,31 @@
+<div class="layui-container">
+    <div class="layui-row">
+        <a class="layui-btn" style="margin-top: 15px" href="/config/client/add/">新建</a>
+        <table class="layui-table">
+            <colgroup>
+                <col width="100">
+                <col width="200">
+                <col>
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>别名</th>
+                    <th>物联网卡地址</th>
+                    <th>管理</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{ range $index, $elem := .Object}}
+                <tr>
+                    <td>{{$elem.Alias}}</td>
+                    <td>{{$elem.Addr}}</td>
+                    <td>
+                        <a href="/config/client/{{.Id}}/edit" class="layui-btn layui-btn-mini layui-btn-danger">编辑</a>
+                        <a href="/config/client/{{.Id}}/del" class="layui-btn layui-btn-mini layui-btn-danger">删除</a>
+                    </td>
+                </tr>
+                {{ end }}
+            </tbody>
+        </table>
+    </div>
+</div>
