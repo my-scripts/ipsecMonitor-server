@@ -11,16 +11,16 @@
                 <tr>
                     <th>别名</th>
                     <th>物联网卡地址</th>
-                    <th>管理</th>
+                    <th style="width: 100px">管理</th>
                 </tr>
             </thead>
             <tbody>
-                {{ range $index, $elem := .Object}}
+                {{ range $index, $elem := .Objects}}
                 <tr>
                     <td>{{$elem.Alias}}</td>
                     <td>{{$elem.Addr}}</td>
                     <td>
-                        <a href="/config/client/{{.Id}}/edit" class="layui-btn layui-btn-mini layui-btn-danger">编辑</a>
+                        <a href="/config/client/edit?id={{.Id}}" class="layui-btn layui-btn-mini layui-btn-danger">编辑</a>
                         <a href="/config/client/{{.Id}}/del" class="layui-btn layui-btn-mini layui-btn-danger">删除</a>
                     </td>
                 </tr>

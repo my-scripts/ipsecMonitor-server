@@ -7,38 +7,23 @@
                 <li class="layui-nav-item {{ if .StatusPage }}layui-this{{ end }}">
                     <a href="javascript:;"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i>&nbsp;状态</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/status/traffic/rules/">流量</a></dd>
+                        <dd><a href="/status/server/">服务端</a></dd>
+                        <dd><a href="/status/client/">客户端</a></dd>
                         <dd><a href="/status/vpn/">VPN</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item {{ if .SystemPage }}layui-this{{ end }}">
                     <a href="javascript:;"><i class="fa fa-tasks fa-fw" aria-hidden="true"></i>&nbsp;系统</a>
                     <dl class="layui-nav-child">
-                        <dd><a href="/interfaces/">接口</a></dd>
-                        <dd><a href="/routes/">路由</a></dd>
                         <dd><a href="/services/">服务</a></dd>
                     </dl>
                 </li>
                 <li class="layui-nav-item {{ if .ConfigPage }}layui-this{{ end }}">
                     <a href="javascript:;"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp;配置</a>
                     <dl class="layui-nav-child">
-                        <!--<dd><a href="/config/generic/">通用</a></dd>-->
-                        <dd><a href="/config/users/">用户</a></dd>
-                        <dd><a href="/config/time/">时间</a></dd>
-                        <dd><a href="/config/routes/">路由</a></dd>
-                        <dd><a href="/config/network/">网络</a></dd>
-                        <dd><a href="/config/vpn/">VPN</a></dd>
+                        <dd><a href="/config/client/">客户端</a></dd>
                     </dl>
                 </li>
-                <li class="layui-nav-item {{ if .ToolPage }}layui-this{{ end }}">
-                    <a href="javascript:;"><i class="fa fa-wrench fa-fw" aria-hidden="true"></i>&nbsp;工具</a>
-                    <dl class="layui-nav-child">
-                        <dd><a href="/tools/log/">日志</a></dd>
-                        <dd><a href="/tools/nettest/">测试</a></dd>
-                        <dd><a href="/tools/ping/conf/">监控</a></dd>
-                    </dl>
-                </li>
-
             </ul>
         </div>
     </div>

@@ -3,18 +3,18 @@
         <div class="site-block" style="margin-top: 15px">
             {{ if .HasError }}
             <blockquote class="layui-elem-quote" style="border-left: 5px solid #FF5722">{{ .Error }}</blockquote>
-            {{ end }}
-            <form class="layui-form layui-form-pane" action="/config/client/" method="post">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">地址</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="addr" value="{{.Addr}}" required lay-verify="required" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
+            {{ end }} {{with .Object}}
+            <form class="layui-form layui-form-pane" action="/config/client?id={{.Id}}" method="post">
                 <div class="layui-form-item">
                     <label class="layui-form-label">别名</label>
                     <div class="layui-input-block">
                         <input type="text" name="alias" value="{{.Alias}}" required lay-verify="required" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="addr" value="{{.Addr}}" required lay-verify="required" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -24,6 +24,7 @@
                     </div>
                 </div>
             </form>
+            {{end}}
         </div>
     </div>
 </div>
