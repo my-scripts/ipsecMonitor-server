@@ -1,0 +1,51 @@
+<div class="layui-header header header-doc">
+    <div class="layui-container">
+        <div>
+            <a class="logo" href="/"><img src="/static/img/logo.ico" style="width: 32px; height: 32px"><i style="margin-left: 10px; color: #c2c2c2; font-style: normal">VPN接入网关</i></a>
+            <ul class="layui-nav">
+                <li class="layui-nav-item {{ if .MainPage }}layui-this{{ end }}"><a href="/"><i class="fa fa-home fa-fw" aria-hidden="true"></i>&nbsp;主页</a></li>
+                <li class="layui-nav-item {{ if .StatusPage }}layui-this{{ end }}">
+                    <a href="javascript:;"><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i>&nbsp;状态</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/status/traffic/rules/">流量</a></dd>
+                        <dd><a href="/status/vpn/">VPN</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item {{ if .SystemPage }}layui-this{{ end }}">
+                    <a href="javascript:;"><i class="fa fa-tasks fa-fw" aria-hidden="true"></i>&nbsp;系统</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/interfaces/">接口</a></dd>
+                        <dd><a href="/routes/">路由</a></dd>
+                        <dd><a href="/services/">服务</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item {{ if .ConfigPage }}layui-this{{ end }}">
+                    <a href="javascript:;"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>&nbsp;配置</a>
+                    <dl class="layui-nav-child">
+                        <!--<dd><a href="/config/generic/">通用</a></dd>-->
+                        <dd><a href="/config/users/">用户</a></dd>
+                        <dd><a href="/config/time/">时间</a></dd>
+                        <dd><a href="/config/routes/">路由</a></dd>
+                        <dd><a href="/config/network/">网络</a></dd>
+                        <dd><a href="/config/vpn/">VPN</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item {{ if .ToolPage }}layui-this{{ end }}">
+                    <a href="javascript:;"><i class="fa fa-wrench fa-fw" aria-hidden="true"></i>&nbsp;工具</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="/tools/log/">日志</a></dd>
+                        <dd><a href="/tools/nettest/">测试</a></dd>
+                        <dd><a href="/tools/ping/conf/">监控</a></dd>
+                    </dl>
+                </li>
+                <!--<li class="layui-nav-item {{ if .AboutPage }}layui-this{{ end }}"><a href="/devices/"><i class="fa fa-info fa-fw" aria-hidden="true"></i>&nbsp;关于</a></li>-->
+                <li class="layui-nav-item"><a href="/logout/"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i>&nbsp;登出</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{{ if .ServiceNeedRestart }}
+<div style="height: 28px; background-color: #FEEFB3">
+    <div style="text-align: center; padding-top: 4px; padding-bottom: 4px"><a href="/services/" style="color: #9F6000; font-size: small">系统服务需要重启</a></div>
+</div>
+{{ end }}

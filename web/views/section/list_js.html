@@ -1,0 +1,16 @@
+<script type="text/javascript">
+    layui.use('laypage', function () {
+        var laypage = layui.laypage;
+        laypage.render({
+            elem: 'pager'
+            ,curr: {{ .CurrentPage }}
+            ,count: {{ .Total }} //总页数
+            ,limit: 20
+            ,jump: function (obj, first) {
+                if (first != true) {
+                    location = "{{.Url}}" + obj.curr
+                }
+            }
+        })
+    })
+</script>
