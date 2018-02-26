@@ -1,7 +1,7 @@
 package routers
 
 import (
-	"tramnms/web/controllers"
+	"script/ipsecMonitor/server/web/controllers"
 
 	"github.com/astaxie/beego"
 )

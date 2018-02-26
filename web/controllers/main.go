@@ -2,18 +2,15 @@ package controllers
 
 import (
 	"fmt"
-	"math"
+	"script/ipsecMonitor/server/tasks"
+	"script/ipsecMonitor/server/web/controllers/base"
+	"script/ipsecMonitor/server/web/models"
 	"time"
-	"vpnportal/controllers/base"
-	"vpnportal/models"
-	"vpnportal/tasks"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
-	"github.com/shirou/gopsutil/load"
-	"github.com/shirou/gopsutil/mem"
 )
 
 var flows []string
@@ -28,6 +25,11 @@ func init() {
 
 type MainController struct {
 	base.BaseController
+}
+
+func (this *MainController) GetIpsecClientCount() int {
+	/////////////////
+	return 0
 }
 
 func (this *MainController) convertBoottime(boottime uint64) string {
@@ -160,14 +162,10 @@ func (this *MainController) BuildMemoryData() {
 
 func (this *MainController) getState(state int) string {
 	switch state {
-	case models.OPENVPN_CLIENT_INIT:
-		return "初始化"
-	case models.OPENVPN_CLIENT_OFFLINE:
-		return "离线"
-	case models.OPENVPN_CLIENT_ONLINE:
-		return "上线"
-	case models.OPENVPN_CLIENT_RECONNECT:
-		return "重连"
+	case models.IPSEC_SERVER_ONLINE:
+		return "启动"
+	case models.IPSEC_SERVER_OFFLINE:
+		return "停止"
 	}
 	return ""
 }
@@ -190,16 +188,7 @@ func (this *MainController) Get() {
 	}
 
 	this.Data["Now"] = time.Now().Format("2006-01-02 15:04:05")
-
-	ls, err := load.Avg()
-	if err == nil {
-		this.Data["LoadPercent"] = math.Floor(ls.Load1 * 100)
-	}
-
-	vm, err := mem.VirtualMemory()
-	if err == nil {
-		this.Data["MemPercent"] = float64(vm.Used) / float64(vm.Total)
-	}
+	this.Data["VpnClientCount"] = this.GetIpsecClientCount()
 
 	ds, err := disk.Usage("/")
 	if err == nil {
@@ -211,28 +200,23 @@ func (this *MainController) Get() {
 	this.BuildMemoryData()
 
 	o := orm.NewOrm()
-	var records []models.OpenVpnHistory
+	var records []models.IpsecServerHistory
 
-	datas, err := o.QueryTable("OpenVpnHistory").OrderBy("-time").All(&records)
+	_, err = o.QueryTable("IpsecServerHistory").OrderBy("-stamp").All(&records)
 	if err != nil {
 		beego.Warning(err)
 	}
-	this.Data["datas"] = datas
 
 	type History struct {
-		Time          string
-		CN            string
-		ConnectedTime string
-		DisplayState  string
-		State         int
+		Time         string
+		DisplayState string
+		State        int
 	}
 
 	histories := make([]History, 0, len(records))
 	for _, record := range records {
 		h := History{}
-		h.Time = time.Unix(record.Time, 0).Format("01-02 15:04:05")
-		h.CN = record.CN
-		h.ConnectedTime = record.ConnectTime
+		h.Time = time.Unix(record.Stamp, 0).Format("01-02 15:04:05")
 		h.State = record.State
 		h.DisplayState = this.getState(h.State)
 		histories = append(histories, h)
