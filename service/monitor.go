@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"path"
+	"script/ipsecMonitor/server/base"
 
 	"github.com/howeyc/fsnotify"
 )
@@ -28,7 +29,9 @@ func (this *Monitor) Run() {
 			case ev := <-watcher.Event:
 				pidfile := path.Base(ev.Name)
 				if pidfile == "pluto.pid" && ev.IsModify() {
-					go notice()
+					if base.IpsecIsWork() {
+						go notice()
+					}
 				}
 				if pidfile == "pluto.pid" && ev.IsDelete() {
 					fmt.Println("ipsec is close")
