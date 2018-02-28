@@ -60,7 +60,7 @@
                     <tr>
                         <td>{{.Time}}</td>
                         <td>
-                            <span class="layui-badge {{ if compare .State 1}} layui-bg-green {{ else if compare .State 2}} {{ else if compare .State 3}} layui-bg-orange {{ else }} layui-bg-gray {{ end }}">{{.DisplayState}}</span>
+                            <span class="layui-badge {{ if compare .State 0}} layui-bg-orange {{ else if compare .State 1}}layui-bg-green  {{ else }} layui-bg-red {{ end }}">{{.DisplayState}}</span>
                         </td>
                     </tr>
                     {{end}}

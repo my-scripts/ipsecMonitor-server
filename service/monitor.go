@@ -1,11 +1,13 @@
 package service
 
 import (
-	"fmt"
 	"log"
 	"path"
 	"script/ipsecMonitor/server/base"
+	"script/ipsecMonitor/server/web/models"
+	"time"
 
+	"github.com/astaxie/beego"
 	"github.com/howeyc/fsnotify"
 )
 
@@ -16,7 +18,7 @@ type Monitor struct {
 func (this *Monitor) Run() {
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
-		log.Println(err)
+		beego.Warning(err)
 		return
 	}
 	defer watcher.Close()
@@ -29,15 +31,20 @@ func (this *Monitor) Run() {
 			case ev := <-watcher.Event:
 				pidfile := path.Base(ev.Name)
 				if pidfile == "pluto.pid" && ev.IsModify() {
-					if base.IpsecIsWork() {
-						go notice()
-					}
+					beego.Warning("ipsec start")
+					his := models.IpsecServerHistory{Stamp: time.Now().Unix(), State: 0}
+					his.AddHistory()
+					time.Sleep(time.Second * 1)
+					go monitorPort()
+
 				}
 				if pidfile == "pluto.pid" && ev.IsDelete() {
-					fmt.Println("ipsec is close")
+					his := models.IpsecServerHistory{Stamp: time.Now().Unix(), State: 2}
+					his.AddHistory()
+					beego.Warning("ipsec is close")
 				}
 			case err := <-watcher.Error:
-				log.Println("error:", err)
+				beego.Warning("error:", err)
 			}
 		}
 	}()
@@ -48,9 +55,23 @@ func (this *Monitor) Run() {
 	}
 
 	<-done
-	defer log.Println("watcher is close")
+	defer beego.Warning("watcher is close")
 }
 
 func notice() {
-	fmt.Println("start notice client")
+	beego.Warning("start notice client")
+}
+
+func monitorPort() {
+	for i := 0; i < 3; i++ {
+		if base.IpsecIsWork() {
+			beego.Warning("ipsec working")
+			his := models.IpsecServerHistory{Stamp: time.Now().Unix(), State: 1}
+			his.AddHistory()
+			go notice()
+			break
+		}
+		time.Sleep(time.Second * 1)
+	}
+
 }

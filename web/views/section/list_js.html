@@ -1,16 +1,19 @@
 <script type="text/javascript">
-    layui.use('laypage', function () {
+    layui.use('laypage', function() {
         var laypage = layui.laypage;
         laypage.render({
-            elem: 'pager'
-            ,curr: {{ .CurrentPage }}
-            ,count: {{ .Total }} //总页数
-            ,limit: 20
-            ,jump: function (obj, first) {
+            elem: 'pager' //注意，这里的 test1 是 ID，不用加 # 号
+                ,
+            count: {{.DataCount}} //数据总数，从服务端得到
+            ,
+            groups: 10,
+            limit: 20,
+            curr: {{.CurrentPage}},
+            jump: function(obj, first) {
                 if (first != true) {
-                    location = "{{.Url}}" + obj.curr
+                    location = "{{.Url}}" + obj.curr + "/" + "?dates={{.Dates}}&datee={{.Datee}}&state={{.State}}"
                 }
             }
-        })
-    })
+        });
+    });
 </script>

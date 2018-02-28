@@ -17,6 +17,7 @@ func init() {
 	beego.Router("/config/client/:id/del", &config.IpsecClientController{}, "get:Delete")
 
 	beego.Router("/status/server/", &server.IpsecServerController{})
+	beego.Router("/status/server/history/:page/", &server.IpsecServerHisController{})
 
 	beego.Router("/server/start/", &server.IpsecServerController{}, "post:Start")
 	beego.Router("/server/stop/", &server.IpsecServerController{}, "post:Stop")
