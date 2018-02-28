@@ -1,4 +1,4 @@
-package server
+package notice
 
 import (
 	"script/ipsecMonitor/server/web/controllers/base"
@@ -7,13 +7,13 @@ import (
 	"time"
 )
 
-type IpsecServerHisController struct {
+type NoticeHisController struct {
 	base.BaseController
 }
 
-func (this *IpsecServerHisController) Get() {
+func (this *NoticeHisController) Get() {
 	this.Layout = "layout.html"
-	this.TplName = "status/server/history.html"
+	this.TplName = "status/notice/history.html"
 	this.LayoutSections = make(map[string]string)
 	this.LayoutSections["Script"] = "section/list_js.html"
 
@@ -24,9 +24,9 @@ func (this *IpsecServerHisController) Get() {
 	}
 	this.Data["CurrentPage"] = page
 
-	this.Data["Url"] = "/status/server/history/"
-	this.Data["DataCount"] = models.GetIpsecHistoryDataCount()
-	data := models.GetIpsecHistoryData(page)
+	this.Data["Url"] = "/status/notice/"
+	this.Data["DataCount"] = models.GetNoticeHistoryDataCount()
+	data := models.GetNoticeHistoryData(page)
 	for index, item := range data {
 		data[index].Time = time.Unix(item.Stamp, 0)
 	}

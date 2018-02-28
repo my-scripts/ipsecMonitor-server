@@ -43,6 +43,9 @@
                     </tr>
                 </tbody>
             </table>
+
+        </div>
+        <div class="layui-col-md6">
             <table class="layui-table" style="margin-right: 15px">
                 <colgroup>
                     <col width="200">
@@ -59,6 +62,7 @@
                     {{range .Objects}}
                     <tr>
                         <td>{{.Time}}</td>
+                        <td>server</td>
                         <td>
                             <span class="layui-badge {{ if compare .State 0}} layui-bg-orange {{ else if compare .State 1}}layui-bg-green  {{ else }} layui-bg-red {{ end }}">{{.DisplayState}}</span>
                         </td>
@@ -66,11 +70,9 @@
                     {{end}}
                 </tbody>
             </table>
-        </div>
-        <div class="layui-col-md6">
-            <canvas id="loadChart" style="margin-left: 15px"></canvas>
+            <!-- <canvas id="loadChart" style="margin-left: 15px"></canvas>
             <canvas id="memoryChart" style="margin-left: 15px; margin-top: 15px"></canvas>
-            <canvas id="networkChart" style="margin-left: 15px; margin-top: 15px"></canvas>
+            <canvas id="networkChart" style="margin-left: 15px; margin-top: 15px"></canvas> -->
         </div>
     </div>
 </div>

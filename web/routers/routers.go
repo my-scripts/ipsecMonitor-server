@@ -3,6 +3,7 @@ package routers
 import (
 	"script/ipsecMonitor/server/web/controllers"
 	"script/ipsecMonitor/server/web/controllers/config"
+	"script/ipsecMonitor/server/web/controllers/status/notice"
 	"script/ipsecMonitor/server/web/controllers/status/server"
 
 	"github.com/astaxie/beego"
@@ -18,6 +19,7 @@ func init() {
 
 	beego.Router("/status/server/", &server.IpsecServerController{})
 	beego.Router("/status/server/history/:page/", &server.IpsecServerHisController{})
+	beego.Router("/status/notice/:page/", &notice.NoticeHisController{})
 
 	beego.Router("/server/start/", &server.IpsecServerController{}, "post:Start")
 	beego.Router("/server/stop/", &server.IpsecServerController{}, "post:Stop")

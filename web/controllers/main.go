@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"fmt"
-	"script/ipsecMonitor/server/tasks"
 	"script/ipsecMonitor/server/web/controllers/base"
 	"script/ipsecMonitor/server/web/models"
 	"time"
@@ -12,16 +11,6 @@ import (
 	"github.com/shirou/gopsutil/disk"
 	"github.com/shirou/gopsutil/host"
 )
-
-var flows []string
-
-func init() {
-	flows = make([]string, 0, 4)
-	flows = append(flows, "Kb")
-	flows = append(flows, "Mb")
-	flows = append(flows, "Gb")
-	flows = append(flows, "B")
-}
 
 type MainController struct {
 	base.BaseController
@@ -60,106 +49,6 @@ func (this *MainController) convertBoottime(boottime uint64) string {
 	return sb
 }
 
-func (this *MainController) BuildLoadData() {
-	loadmon := tasks.GetLoadMonitor()
-	values := loadmon.Data.Values()
-
-	loadlabels := make([]string, len(values))
-	loaddata := make([]float64, len(values))
-
-	for i, v := range values {
-		item := v.(tasks.LoadInfo)
-		loadlabels[i] = fmt.Sprintf("%d:%d", item.Time.Hour(), item.Time.Minute())
-		loaddata[i] = item.Load * 100
-	}
-
-	this.Data["LoadLabels"] = loadlabels
-	this.Data["LoadData"] = loaddata
-}
-
-func (this *MainController) BuildIoData() {
-	iomon := tasks.GetIoMonitor()
-	values := iomon.Data.Values()
-
-	iolables := make([]string, len(values))
-	iorecv := make([]uint64, len(values))
-	iosend := make([]uint64, len(values))
-
-	for i := 1; i < len(values); i++ {
-		pre := values[i-1].(tasks.IoInfo)
-		cur := values[i].(tasks.IoInfo)
-
-		iolables[i-1] = fmt.Sprintf("%d:%d", cur.Time.Hour(), cur.Time.Minute())
-
-		rebit := cur.BytesRecv - pre.BytesRecv
-		rekb := rebit / 1024
-		remb := rekb / 1024
-		regb := remb / 1024
-
-		sebit := cur.BytesSend - pre.BytesSend
-		sekb := sebit / 1024
-		semb := sekb / 1024
-		segb := semb / 1024
-
-		if rebit > 1024 {
-			iorecv[i-1] = rekb
-			this.Data["IOFlow"] = flows[0]
-			if rekb > 1024 {
-				iorecv[i-1] = remb
-				this.Data["IOFlow"] = flows[1]
-				if remb > 1024 {
-					iorecv[i-1] = regb
-					this.Data["IOFlow"] = flows[2]
-				}
-			}
-
-		}
-		if rebit < 1024 {
-			iorecv[i-1] = rebit
-			this.Data["IOFlow"] = flows[3]
-		}
-
-		if sebit > 1024 {
-			iosend[i-1] = sekb
-			this.Data["IOFlow"] = flows[0]
-			if sekb > 1024 {
-				iosend[i-1] = semb
-				this.Data["IOFlow"] = flows[1]
-				if semb > 1024 {
-					iosend[i-1] = segb
-					this.Data["IOFlow"] = flows[2]
-				}
-			}
-
-		}
-		if sebit < 1024 {
-			iosend[i-1] = sebit
-			this.Data["IOFlow"] = flows[3]
-		}
-	}
-
-	this.Data["IOLabels"] = iolables
-	this.Data["IORecv"] = iorecv
-	this.Data["IOSend"] = iosend
-}
-
-func (this *MainController) BuildMemoryData() {
-	intermon := tasks.GetInterMoniter()
-	values := intermon.Data.Values()
-
-	interlables := make([]string, len(values))
-	intermemory := make([]float64, len(values))
-
-	for i, v := range values {
-		item := v.(tasks.MemoryInfo)
-		interlables[i] = fmt.Sprintf("%d:%d", item.Time.Hour(), item.Time.Minute())
-		intermemory[i] = item.Memory
-	}
-
-	this.Data["InterLabels"] = interlables
-	this.Data["InterMemory"] = intermemory
-}
-
 func (this *MainController) getState(state int) string {
 	switch state {
 	case models.IPSEC_SERVER_START:
@@ -196,10 +85,6 @@ func (this *MainController) Get() {
 	if err == nil {
 		this.Data["DiskPercent"] = ds.UsedPercent
 	}
-
-	this.BuildLoadData()
-	this.BuildIoData()
-	this.BuildMemoryData()
 
 	o := orm.NewOrm()
 	var records []models.IpsecServerHistory

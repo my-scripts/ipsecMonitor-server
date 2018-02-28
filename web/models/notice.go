@@ -6,23 +6,19 @@ import (
 	"github.com/astaxie/beego/orm"
 )
 
-const (
-	IPSEC_SERVER_START = iota
-	IPSEC_SERVER_ONLINE
-	IPSEC_SERVER_STOP
-)
-
-type IpsecServerHistory struct {
+type NoticeHistory struct {
 	Id    int
+	Alias string
 	Stamp int64
 	State int
 	Time  time.Time `orm:"-"`
 }
 
-func (this *IpsecServerHistory) AddHistory() bool {
+func (this *NoticeHistory) AddHistory() bool {
 	o := orm.NewOrm()
 
-	his := IpsecServerHistory{}
+	his := NoticeHistory{}
+	his.Alias = this.Alias
 	his.Stamp = this.Stamp
 	his.State = this.State
 	_, succ := o.Insert(&his)
@@ -32,21 +28,21 @@ func (this *IpsecServerHistory) AddHistory() bool {
 	return true
 }
 
-func GetIpsecHistoryData(page int) []IpsecServerHistory {
+func GetNoticeHistoryData(page int) []NoticeHistory {
 	cur := page - 1
 	if cur < 0 {
 		cur = 0
 	}
 	o := orm.NewOrm()
-	var data []IpsecServerHistory
-	o.QueryTable("IpsecServerHistory").OrderBy("-stamp").Limit(20, 20*cur).All(&data)
+	var data []NoticeHistory
+	o.QueryTable("NoticeHistory").OrderBy("-stamp").Limit(20, 20*cur).All(&data)
 	return data
 }
 
-func GetIpsecHistoryDataCount() int64 {
+func GetNoticeHistoryDataCount() int64 {
 	var count int64 = 0
 	o := orm.NewOrm()
-	count, err := o.QueryTable("ipsec_server_history").Count()
+	count, err := o.QueryTable("NoticeHistory").Count()
 	if err != nil {
 		return 0
 	}
