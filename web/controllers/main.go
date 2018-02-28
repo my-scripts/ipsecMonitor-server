@@ -28,7 +28,7 @@ type MainController struct {
 }
 
 func (this *MainController) GetIpsecClientCount() int {
-	/////////////////
+	// TODO: GetIpsecClientCount
 	return 0
 }
 

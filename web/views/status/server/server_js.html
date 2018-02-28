@@ -1,0 +1,26 @@
+<script type="text/javascript">
+    function action(url, name) {
+        $.post(url, {
+            "name": name
+        }, function(result) {
+            if (result["Result"] === true) {
+                location.reload()
+            }
+        });
+    }
+
+    $(document).ready(function() {
+
+        $(".restart").click(function() {
+            action("/server/restart/", $(this).attr("name"))
+        });
+
+        $(".start").click(function() {
+            action("/server/start/", $(this).attr("name"))
+        });
+
+        $(".stop").click(function() {
+            action("/server/stop/", $(this).attr("name"))
+        });
+    })
+</script>

@@ -1,0 +1,54 @@
+<div class="layui-container">
+    <div class="layui-row">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                <li class="layui-this"><a href="/status/server/server/">当前状态</a></li>
+                <li><a href="/status/server/history/">历史记录</a></li>
+            </ul>
+            <div class="layui-tab-content" style="padding-left: 0; padding-right: 0;padding-top: 0">
+                <div class="layui-tab-item layui-show">
+                    <div class="layui-row">
+                        <table class="layui-table" style="margin-top:15px;">
+                            <colgroup>
+                                <col width="100">
+                                <col width="200">
+                                <col>
+                            </colgroup>
+                            <thead>
+                                <tr>
+                                    <th>名称</th>
+                                    <th>PID</th>
+                                    <th>状态</th>
+                                    <th>管理</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{ range $index, $elem := .Services}}
+                                <tr>
+                                    <td>
+                                        {{$elem.Name}}
+                                    </td>
+                                    {{ if compare $elem.Pid -1 }}
+                                    <td>--</td>
+                                    {{ else }}
+                                    <td>{{ $elem.Pid }}</td>
+                                    {{ end }}
+                                    <td>
+                                        {{ if compare $elem.State 0 }}<span class="layui-badge layui-bg-yellow">启动</span>{{ end }} {{ if compare $elem.State 1 }}<span class="layui-badge layui-bg-green">工作</span>{{ end }} {{ if compare $elem.State 2 }}
+                                        <span class="layui-badge ">停止</span>{{ end }}
+                                    </td>
+                                    <td>
+                                        {{ if compare $elem.State 2 }}
+                                        <button name="{{$elem.ProcName}}" class="layui-btn layui-btn-mini start">启动</button> {{ else }}
+                                        <button name="{{$elem.ProcName}}" class="layui-btn layui-btn-mini layui-btn-danger stop">停止</button>
+                                        <button name="{{$elem.ProcName}}" class="layui-btn layui-btn-mini layui-btn-warm restart">重启</button> {{ end }}
+                                    </td>
+                                </tr>
+                                {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
