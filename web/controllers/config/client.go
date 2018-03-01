@@ -29,7 +29,9 @@ func (this *IpsecClientController) Get() {
 func (this *IpsecClientController) Add() {
 	this.Layout = "layout.html"
 	this.TplName = "config/client/client_form.html"
+	client := models.ClientConf{}
 	this.Data["ConfigPage"] = true
+	this.Data["Object"] = client
 }
 
 func (this *IpsecClientController) Edit() {
