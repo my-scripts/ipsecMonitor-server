@@ -11,6 +11,16 @@ type ClientConf struct {
 	Addr  string `form:"addr"`
 }
 
+func GetClients() []ClientConf {
+	o := orm.NewOrm()
+	var clients []ClientConf
+	_, err := o.QueryTable("ClientConf").All(&clients)
+	if err != nil {
+		return nil
+	}
+	return clients
+}
+
 func (this *ClientConf) GetClient() bool {
 	o := orm.NewOrm()
 	client := ClientConf{Id: this.Id}

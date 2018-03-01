@@ -7,11 +7,11 @@ import (
 )
 
 type NoticeHistory struct {
-	Id    int
-	Alias string
-	Stamp int64
-	State int
-	Time  time.Time `orm:"-"`
+	Id      int
+	Alias   string
+	Stamp   int64
+	Success bool
+	Time    time.Time `orm:"-"`
 }
 
 func (this *NoticeHistory) AddHistory() bool {
@@ -20,7 +20,7 @@ func (this *NoticeHistory) AddHistory() bool {
 	his := NoticeHistory{}
 	his.Alias = this.Alias
 	his.Stamp = this.Stamp
-	his.State = this.State
+	his.Success = this.Success
 	_, succ := o.Insert(&his)
 	if succ != nil {
 		return false

@@ -9,16 +9,21 @@ type IpsecRpcClient struct {
 }
 
 type Status struct {
-	Status bool
+	Succ bool
+}
+
+type Input struct {
+	Stamp int64
 }
 
 func (this *IpsecRpcClient) Connect(host string, port int) bool {
 	return this.ConnectRemote(host, port)
 }
 
-func (this *IpsecRpcClient) GetNodeHaStatus() *Status {
+func (this *IpsecRpcClient) RestartIpsec(stamp int64) *Status {
 	replay := Status{}
-	err := this.Handle.Call("Handler.RestartIpsec", 0, &replay)
+	req := Input{Stamp: stamp}
+	err := this.Handle.Call("Handler.RestartIpsec", &req, &replay)
 	if err != nil {
 		log.Println(err)
 		return nil

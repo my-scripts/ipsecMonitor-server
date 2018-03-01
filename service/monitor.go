@@ -4,6 +4,7 @@ import (
 	"log"
 	"path"
 	"script/ipsecMonitor/server/base"
+	serverrpc "script/ipsecMonitor/server/rpc"
 	"script/ipsecMonitor/server/web/models"
 	"time"
 
@@ -59,7 +60,26 @@ func (this *Monitor) Run() {
 }
 
 func notice() {
-	beego.Warning("start notice client")
+	stamp := time.Now().Unix()
+	clientport, _ := beego.AppConfig.Int("clientport")
+	clients := models.GetClients()
+	for k, _ := range clients {
+		go func(index int) {
+			vv := clients[index]
+			client := serverrpc.IpsecRpcClient{}
+			if !client.Connect(vv.Addr, clientport) {
+				his := models.NoticeHistory{Stamp: time.Now().Unix(), Alias: vv.Alias, Success: false}
+				his.AddHistory()
+				return
+			}
+			defer client.Close()
+
+			reply := client.RestartIpsec(stamp)
+
+			his := models.NoticeHistory{Stamp: time.Now().Unix(), Alias: vv.Alias, Success: reply.Succ}
+			his.AddHistory()
+		}(k)
+	}
 }
 
 func monitorPort() {

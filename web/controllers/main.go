@@ -16,11 +16,6 @@ type MainController struct {
 	base.BaseController
 }
 
-func (this *MainController) GetIpsecClientCount() int {
-	// TODO: GetIpsecClientCount
-	return 0
-}
-
 func (this *MainController) convertBoottime(boottime uint64) string {
 	total := uint64(time.Now().Unix()) - boottime
 	days := total / (3600 * 24)
@@ -64,9 +59,9 @@ func (this *MainController) getState(state int) string {
 func (this *MainController) Get() {
 	this.Layout = "layout.html"
 	this.TplName = "index.html"
-	this.LayoutSections = make(map[string]string)
-	this.LayoutSections["HtmlHead"] = "index_head.html"
-	this.LayoutSections["Script"] = "index_js.html"
+	// this.LayoutSections = make(map[string]string)
+	// this.LayoutSections["HtmlHead"] = "index_head.html"
+	// this.LayoutSections["Script"] = "index_js.html"
 
 	this.Data["MainPage"] = true
 
@@ -79,7 +74,6 @@ func (this *MainController) Get() {
 	}
 
 	this.Data["Now"] = time.Now().Format("2006-01-02 15:04:05")
-	this.Data["VpnClientCount"] = this.GetIpsecClientCount()
 
 	ds, err := disk.Usage("/")
 	if err == nil {
@@ -93,7 +87,7 @@ func (this *MainController) Get() {
 	if err != nil {
 		beego.Warning(err)
 	}
-
+	beego.Warning(records)
 	type History struct {
 		Time         string
 		DisplayState string
@@ -110,5 +104,7 @@ func (this *MainController) Get() {
 	}
 	if len(histories) > 15 {
 		this.Data["Objects"] = histories[:15]
+	} else {
+		this.Data["Objects"] = histories
 	}
 }
