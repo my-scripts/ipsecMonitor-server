@@ -87,7 +87,7 @@ func (this *MainController) Get() {
 	if err != nil {
 		beego.Warning(err)
 	}
-	beego.Warning(records)
+
 	type History struct {
 		Time         string
 		DisplayState string
